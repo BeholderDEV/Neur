@@ -54,10 +54,11 @@ $('#test').click(function( event  ) {
   ];
   network.train(trainingSet, {
     // log: 10,
-    iterations: 10000,
+    iterations: 100,
     error: 0.0001,
     rate: 0.2
   });
+  console.log('acabo')
   $('#actual').attr('src','http://beholderdev.github.io/Neur/resources/img/f2/'+2+'.png')
   var img = document.getElementById('actual');
   var canvas = document.createElement('canvas');

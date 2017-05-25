@@ -59,7 +59,7 @@ $('#test').click(function( event  ) {
   ];
   network.train(trainingSet, {
     // log: 10,
-    iterations: 1000,
+    iterations: 10,
     error: 0.0001,
     rate: 0.2
   });

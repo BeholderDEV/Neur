@@ -16,7 +16,7 @@ var j = 0;
 $('#test').click(function( event  ) {
   event.preventDefault();
   j++
-  var network = new Architect.Perceptron(1024 * 4, 120 ,1);
+  var network = new Architect.Perceptron(1024 * 4, 20 ,1);
 
   var vet = []
   //$('#actual').attr('src','resources/img/f1/full/'+j+'.png')
@@ -55,7 +55,7 @@ $('#test').click(function( event  ) {
   ];
   network.train(trainingSet, {
     // log: 10,
-    iterations: 100,
+    iterations: 1000,
     error: 0.0001,
     rate: 0.2
   });

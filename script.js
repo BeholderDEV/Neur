@@ -30,6 +30,7 @@ $('#test').click(function( event  ) {
     context.drawImage(img, 0, 0 );
     var myData = context.getImageData(0, 0, img.width, img.height);
     vet[i-1] = myData
+    console.log(i)
   }
   // $('#actual').attr('src','https://beholderdev.github.io/Neur/resources/img/f1/'+j+'.png')
   // var img = document.getElementById('actual');

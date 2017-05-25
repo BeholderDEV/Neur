@@ -16,12 +16,12 @@ var j = 0;
 $('#test').click(function( event  ) {
   event.preventDefault();
   j++
-  var network = new Architect.Perceptron(1024 * 4, 20 ,1);
+  var network = new Architect.Perceptron(1024, 20 ,1);
 
   var vet = []
   //$('#actual').attr('src','resources/img/f1/full/'+j+'.png')
   for (var i = 1; i <= 10; i++) {
-    $('#actual').attr('src','http://beholderdev.github.io/Neur/resources/img/f1/'+i+'.png')
+    $('#actual').attr('src','http://beholderdev.github.io/Neur/resources/img/f1/low/'+i+'.jpg')
     var img = document.getElementById('actual');
     var canvas = document.createElement('canvas');
     var context = canvas.getContext('2d');
@@ -29,7 +29,11 @@ $('#test').click(function( event  ) {
     canvas.height = img.height;
     context.drawImage(img, 0, 0 );
     var myData = context.getImageData(0, 0, img.width, img.height);
-    vet[i-1] = myData
+    var newData = []
+    for(var j = 0; j < 1024 ; j++){
+      newData[j] = myData[j*3]
+    }
+    vet[i-1] = newData
     console.log(i)
   }
   // $('#actual').attr('src','https://beholderdev.github.io/Neur/resources/img/f1/'+j+'.png')
@@ -60,7 +64,7 @@ $('#test').click(function( event  ) {
     rate: 0.2
   });
   console.log('acabo')
-  $('#actual').attr('src','http://beholderdev.github.io/Neur/resources/img/f2/'+2+'.png')
+  $('#actual').attr('src','http://beholderdev.github.io/Neur/resources/img/f2/low/'+2+'.jpg')
   var img = document.getElementById('actual');
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
@@ -68,8 +72,11 @@ $('#test').click(function( event  ) {
   canvas.height = img.height;
   context.drawImage(img, 0, 0 );
   var myData = context.getImageData(0, 0, img.width, img.height);
-
-  var out = network.activate(myData);
+  var newData = []
+  for(var j = 0; j < 1024 ; j++){
+    newData[j] = myData[j*3]
+  }
+  var out = network.activate(newData);
   console.log(out)
   // var i1 = $('#input1').val()
   // var i2 = $('#input2').val()

@@ -15,6 +15,7 @@ var j = 0;
 
 $('#test').click(function( event  ) {
   event.preventDefault();
+  console.log('v0.1')
   j++
   var network = new Architect.Perceptron(1024, 20 ,1);
 
@@ -64,7 +65,7 @@ $('#test').click(function( event  ) {
     rate: 0.2
   });
   console.log('acabo')
-  $('#actual').attr('src','http://beholderdev.github.io/Neur/resources/img/f2/low/'+2+'.jpg')
+  $('#actual').attr('src','http://beholderdev.github.io/Neur/resources/img/f2/low/'+8+'.jpg')
   var img = document.getElementById('actual');
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');

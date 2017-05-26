@@ -5,12 +5,21 @@ var Methods = neataptic.Methods;
 var Architect = neataptic.Architect;
 var Trainer = neataptic.Trainer;
 var j = 0;
-var numeroImagens = 145;
+var numeroImagens = 10;
 var network;
 
 $( document ).ready(function() {
 
 });
+
+// var console = {};
+// console.log = function( a ){
+//   $('#console').append('<p>'+ a +'</p>')
+// };
+// console.warn = function( a ){
+//   $('#console').append('<p class="text-danger">'+ a +'</p>')
+// };
+
 
 function download(text, name, type){
     var a = document.createElement("a");
@@ -101,17 +110,17 @@ $('#save').click(function(event){
 
 $('#test').click(function(event){
   if(network === undefined){
-    return;
+    return
   }
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
-  validateTest(1, 10, 'f2', canvas, context);
+  validateTest(1, 10, 'f1', canvas, context);
 });
 
 $('#train').click(function( event  ) {
   event.preventDefault();
   j++;
-  network = new Architect.Perceptron(1024, 70 ,1);
+  network = new Architect.Perceptron(1024, 512, 1);
 
   var trainingSet = [];
   var canvas = document.createElement('canvas');
@@ -119,10 +128,10 @@ $('#train').click(function( event  ) {
   prepareImageArray(1, 10, 'f1', trainingSet, canvas, context, function(trainSet){
     console.log("Iniciou")
     network.train(trainSet, {
-      log: 1000,
-      iterations: 10000,
-      error: 0.0001,
-      rate: 0.2
+      log: 50,
+      iterations: 1000,
+      error: 0.0004,
+      rate: 0.0001
     });
     console.log('Terminou');
   });

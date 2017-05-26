@@ -4,15 +4,30 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   </head>
   <body>
+    <style>
+      #console {
+        height: 500px;
+        overflow-y: auto;
+      }
+    </style>
     <section>
       <div class="container">
         <button id="train" class="btn btn-outline-primary">Train Network</button>
         <button id="load" class="btn btn-outline-primary">Load Network</button>
         <button id="save" class="btn btn-outline-primary">Save Network</button>
         <button id="test" class="btn btn-outline-primary">Test Network</button>
-        <div class="col-md-12">
+
+        <div class="col-md-12 m-3">
+
           <img id="actual" class="img-fluid" src="resources/img/f1/low/1.jpg">
         </div>
+        <div class="col-md-12 m-3">
+          <div class="card">
+            <div id="console" class="card-block bg-faded">
+            </div>
+          </div>
+        </div>
+        
       </div>
     </section>
 

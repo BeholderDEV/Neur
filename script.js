@@ -4,109 +4,127 @@ var Network = neataptic.Network;
 var Methods = neataptic.Methods;
 var Architect = neataptic.Architect;
 var Trainer = neataptic.Trainer;
-
-function tryShit(){
-  var network = new Architect.Perceptron(2, 3 ,1);
-  var trainingSet = [
-    { input: [0, 0], output: [0] },
-    { input: [1, 1], output: [2] }
-  ];
-  network.train(trainingSet, {
-    // log: 10,
-    iterations: 1000,
-    error: 0.0001,
-    rate: 0.2
-  });
-  var out = network.activate([0, 0]);
-  console.log("Result com valores maiores que um: " + out)
-
-  var out = network.activate([1, 1]);
-  console.log("Result com valores maiores que um: " + out)
-
-  var trainingSet = [
-    { input: [0, 0], output: [0 / 2] },
-    { input: [1, 1], output: [2 / 2] }
-  ];
-  network.train(trainingSet, {
-    // log: 10,
-    iterations: 1000,
-    error: 0.0001,
-    rate: 0.2
-  });
-
-  var out = network.activate([0, 0]) * 2;
-  console.log("Result com valores normalizados: " + out)
-
-  var out = network.activate([1, 1]) * 2;
-  console.log("Result com valores normalizados: " + out)
-}
-
-
+var j = 0;
+var numeroImagens = 145;
+var network;
 
 $( document ).ready(function() {
 
 });
 
-var j = 0;
-var numeroImagens = 145;
+function download(text, name, type){
+    var a = document.createElement("a");
+    var file = new Blob([text], {type: type});
+    a.href = URL.createObjectURL(file);
+    a.download = name;
+    a.click();
+}
 
-$('#test').click(function( event  ) {
-  event.preventDefault();
-
-  tryShit()
-
-  // j++
-  var network = new Architect.Perceptron(1024, 70 ,1);
-
-  var vet = []
-  //$('#actual').attr('src','resources/img/f1/full/'+j+'.png')
-  for (var i = 1; i <= 10; i++) {
-    $('#actual').attr('src','resources/img/f1/low/'+i+'.jpg')
-    var img = document.getElementById('actual');
-    var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    context.drawImage(img, 0, 0 );
-    var myData = context.getImageData(0, 0, img.width, img.height);
-    var newData = []
-    for(var j = 0; j < 1024 ; j++){
-      newData[j] = myData[j*3]
-    }
-    vet[i-1] = newData
-    console.log(i)
+function validateTest(i, numeroImageTest, set, canvas, context){
+  if(i === numeroImageTest + 1){
+    return;
   }
-  var trainingSet = [
-    { input: vet[0], output: [1 / numeroImagens] },
-    { input: vet[1], output: [2 / numeroImagens] },
-    { input: vet[2], output: [3 / numeroImagens] },
-    { input: vet[3], output: [4 / numeroImagens] },
-    { input: vet[4], output: [5 / numeroImagens] },
-    { input: vet[5], output: [6 / numeroImagens] },
-    { input: vet[6], output: [7 / numeroImagens] },
-    { input: vet[7], output: [8 / numeroImagens] },
-    { input: vet[8], output: [9 / numeroImagens] },
-    { input: vet[9], output: [10 / numeroImagens] }
-  ];
-  network.train(trainingSet, {
-    // log: 10,
-    iterations: 100,
-    error: 0.0001,
-    rate: 0.2
+  loadImage(i, set, 'low', function(baseImage){
+    canvas.width = baseImage.width;
+    canvas.height = baseImage.height;
+    context.drawImage(baseImage, 0, 0 );
+    var myData = context.getImageData(0, 0, baseImage.width, baseImage.height);
+    var newData = [];
+    for(var j = 0; j < 1024 ; j++){
+      newData[j] = myData.data[j * 4];
+    }
+    var out = network.activate(newData) * numeroImagens;
+    console.log('Testando Imagem ' + i + ': ' + out);
+    validateTest(i + 1, numeroImageTest, 'f2', canvas, context);
   });
-  console.log('acabo')
-  $('#actual').attr('src','resources/img/f2/low/'+8+'.jpg')
-  var img = document.getElementById('actual');
+
+}
+
+function loadImage(i, set, quality, callback){
+  var baseImage = new Image();
+  baseImage.src = 'resources/img/' + set + '/' + quality + '/' + i + '.jpg';
+  baseImage.onerror = function(){
+    callback(null);
+  };
+  baseImage.onload = function(){
+    // console.log("Satan + " + i);
+    callback(baseImage);
+  };
+
+}
+
+function prepareImageArray(i, numeroImageTest, set, trainingSet, canvas, context, callback){
+  if(i === numeroImageTest + 1){
+    callback(trainingSet);
+    return;
+  }
+  loadImage(i, set, 'low', function(baseImage){
+    if(baseImage === null){
+      prepareImageArray(i + 1, numeroImageTest, set, trainingSet, canvas, context, callback);
+      return;
+    }
+    canvas.width = baseImage.width;
+    canvas.height = baseImage.height;
+    context.drawImage(baseImage, 0, 0 );
+    var myData = context.getImageData(0, 0, baseImage.width, baseImage.height);
+    var newData = [];
+    // console.log(myData);
+    // console.log(myData.data);
+    for(var j = 0; j < 1024 ; j++){
+      newData[j] = myData.data[j * 4];
+      // console.log("Enchendo no vetor " + myData[j]);
+    }
+    // console.log(newData);
+    trainingSet[i - 1] = {input: newData, output: [i / numeroImagens]};
+    prepareImageArray(i + 1, numeroImageTest, set, trainingSet, canvas, context, callback);
+    // context.clearRect(0, 0, img.width, img.height)
+    // console.log("Training " + trainingSet[i - 1].output);
+  });
+
+}
+
+$('#load').click(function(event){
+  $.getJSON("resources/trained_network/teste_10Img_10000Ite_70Camadas.json", function(json) {
+      console.log("Loaded JSON");
+      network = Network.fromJSON(json);
+  });
+});
+
+$('#save').click(function(event){
+  if(network === undefined){
+    return;
+  }
+  var exported = network.toJSON();
+  exported = JSON.stringify(exported);
+  download(exported, 'Neur.json', 'text/json');
+});
+
+$('#test').click(function(event){
+  if(network === undefined){
+    return;
+  }
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
-  canvas.width = img.width;
-  canvas.height = img.height;
-  context.drawImage(img, 0, 0 );
-  var myData = context.getImageData(0, 0, img.width, img.height);
-  var newData = []
-  for(var j = 0; j < 1024 ; j++){
-    newData[j] = myData[j*3]
-  }
-  var out = network.activate(newData) * numeroImagens;
-  console.log("Testando imagens 8, resultado da rede neural: " + out)
+  validateTest(1, 10, 'f2', canvas, context);
+});
+
+$('#train').click(function( event  ) {
+  event.preventDefault();
+  j++;
+  network = new Architect.Perceptron(1024, 70 ,1);
+
+  var trainingSet = [];
+  var canvas = document.createElement('canvas');
+  var context = canvas.getContext('2d');
+  prepareImageArray(1, 10, 'f1', trainingSet, canvas, context, function(trainSet){
+    console.log("Iniciou")
+    network.train(trainSet, {
+      log: 1000,
+      iterations: 10000,
+      error: 0.0001,
+      rate: 0.2
+    });
+    console.log('Terminou');
+  });
+
 });

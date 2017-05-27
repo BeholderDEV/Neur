@@ -7,8 +7,7 @@ var Trainer = neataptic.Trainer;
 var j = 0;
 var numeroImagens = 3;
 var network;
-var imgQuality = 'testLow';
-var pixelCount = 256;
+var imgQuality = 'low';
 
 $( document ).ready(function() {
 
@@ -41,7 +40,7 @@ function validateTest(i, numeroImageTest, set, canvas, context){
     context.drawImage(baseImage, 0, 0 );
     var myData = context.getImageData(0, 0, baseImage.width, baseImage.height);
     var newData = [];
-    for(var j = 0; j < pixelCount ; j++){
+    for(var j = 0; j < baseImage.width * baseImage.height ; j++){
       newData[j] = myData.data[j * 4];
     }
     var out = network.activate(newData) * numeroImagens;
@@ -78,7 +77,7 @@ function prepareImageArray(i, numeroImageTest, set, trainingSet, canvas, context
     context.drawImage(baseImage, 0, 0 );
     var myData = context.getImageData(0, 0, baseImage.width, baseImage.height);
     var newData = [];
-    for(var j = 0; j < pixelCount; j++){
+    for(var j = 0; j < baseImage.width * baseImage.height; j++){
       newData[j] = myData.data[j * 4];
     }
     trainingSet[i - 1] = {input: newData, output: [i / numeroImagens]};
@@ -88,7 +87,7 @@ function prepareImageArray(i, numeroImageTest, set, trainingSet, canvas, context
 }
 
 $('#load').click(function(event){
-  $.getJSON("resources/trained_network/Neur16.json", function(json) {
+  $.getJSON("resources/trained_network/Neur32.json", function(json) {
       network = Network.fromJSON(json);
       console.log("Loaded JSON");
   });

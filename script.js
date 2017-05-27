@@ -5,8 +5,10 @@ var Methods = neataptic.Methods;
 var Architect = neataptic.Architect;
 var Trainer = neataptic.Trainer;
 var j = 0;
-var numeroImagens = 10;
+var numeroImagens = 3;
 var network;
+var imgQuality = 'testLow';
+var pixelCount = 256;
 
 $( document ).ready(function() {
 
@@ -33,13 +35,13 @@ function validateTest(i, numeroImageTest, set, canvas, context){
   if(i === numeroImageTest + 1){
     return;
   }
-  loadImage(i, set, 'low', function(baseImage){
+  loadImage(i, set, imgQuality, function(baseImage){
     canvas.width = baseImage.width;
     canvas.height = baseImage.height;
     context.drawImage(baseImage, 0, 0 );
     var myData = context.getImageData(0, 0, baseImage.width, baseImage.height);
     var newData = [];
-    for(var j = 0; j < 1024 ; j++){
+    for(var j = 0; j < pixelCount ; j++){
       newData[j] = myData.data[j * 4];
     }
     var out = network.activate(newData) * numeroImagens;
@@ -56,7 +58,6 @@ function loadImage(i, set, quality, callback){
     callback(null);
   };
   baseImage.onload = function(){
-    // console.log("Satan + " + i);
     callback(baseImage);
   };
 
@@ -67,7 +68,7 @@ function prepareImageArray(i, numeroImageTest, set, trainingSet, canvas, context
     callback(trainingSet);
     return;
   }
-  loadImage(i, set, 'low', function(baseImage){
+  loadImage(i, set, imgQuality, function(baseImage){
     if(baseImage === null){
       prepareImageArray(i + 1, numeroImageTest, set, trainingSet, canvas, context, callback);
       return;
@@ -77,25 +78,19 @@ function prepareImageArray(i, numeroImageTest, set, trainingSet, canvas, context
     context.drawImage(baseImage, 0, 0 );
     var myData = context.getImageData(0, 0, baseImage.width, baseImage.height);
     var newData = [];
-    // console.log(myData);
-    // console.log(myData.data);
-    for(var j = 0; j < 1024 ; j++){
+    for(var j = 0; j < pixelCount; j++){
       newData[j] = myData.data[j * 4];
-      // console.log("Enchendo no vetor " + myData[j]);
     }
-    // console.log(newData);
     trainingSet[i - 1] = {input: newData, output: [i / numeroImagens]};
     prepareImageArray(i + 1, numeroImageTest, set, trainingSet, canvas, context, callback);
-    // context.clearRect(0, 0, img.width, img.height)
-    // console.log("Training " + trainingSet[i - 1].output);
   });
 
 }
 
 $('#load').click(function(event){
-  $.getJSON("resources/trained_network/teste_10Img_10000Ite_70Camadas.json", function(json) {
-      console.log("Loaded JSON");
+  $.getJSON("resources/trained_network/Neur16.json", function(json) {
       network = Network.fromJSON(json);
+      console.log("Loaded JSON");
   });
 });
 
@@ -110,11 +105,11 @@ $('#save').click(function(event){
 
 $('#test').click(function(event){
   if(network === undefined){
-    return
+    return;
   }
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
-  validateTest(1, 10, 'f1', canvas, context);
+  validateTest(1, numeroImagens, 'f2', canvas, context);
 });
 
 $('#train').click(function( event  ) {
@@ -125,13 +120,13 @@ $('#train').click(function( event  ) {
   var trainingSet = [];
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
-  prepareImageArray(1, 10, 'f1', trainingSet, canvas, context, function(trainSet){
-    console.log("Iniciou")
+  prepareImageArray(1, numeroImagens, 'f1', trainingSet, canvas, context, function(trainSet){
+    console.log("Iniciou");
     network.train(trainSet, {
-      log: 50,
-      iterations: 1000,
-      error: 0.0004,
-      rate: 0.0001
+      log: 1000,
+      iterations: 10000,
+      error: 0.0000001,
+      rate: 0.001
     });
     console.log('Terminou');
   });

@@ -5,7 +5,7 @@ var Methods = neataptic.Methods;
 var Architect = neataptic.Architect;
 var Trainer = neataptic.Trainer;
 var j = 0;
-var numeroImagens = 10;
+var numeroImagens = 151;
 var network;
 var imgQuality = 'testLow';
 var testSet = 'f1';
@@ -46,7 +46,8 @@ function validateTest(i, numeroImageTest, set, canvas, context){
     }
     // var out = network.activate(newData) * numeroImagens;
     var out = network.activate(newData);
-    console.log('Testando Imagem ' + i + ': ' + out);
+    out = parseFloat(out);
+    console.log('Testando Imagem ' + i + ': ' + parseFloat(out * 100).toFixed(2) + '%');
     validateTest(i + 1, numeroImageTest, set, canvas, context);
   });
 
@@ -123,6 +124,7 @@ $('#test').click(function(event){
   }
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
+  console.log("Reconhecendo Squirtle");
   validateTest(1, numeroImagens, testSet, canvas, context);
   if(testSet === 'f1'){
     testSet = 'f2';
@@ -141,8 +143,8 @@ $('#train').click(function(event) {
   prepareImageArray(1, numeroImagens, 'f1', trainingSet, canvas, context, function(trainSet){
     console.log("Iniciou");
     network.train(trainSet, {
-      log: 5000,
-      iterations: 50000,
+      log: 100,
+      iterations: 1000,
       error: 0.0000001,
       rate: 0.001
     });

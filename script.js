@@ -14,13 +14,13 @@ $( document ).ready(function() {
 
 });
 
-// var console = {};
-// console.log = function( a ){
-//   $('#console').append('<p>'+ a +'</p>')
-// };
-// console.warn = function( a ){
-//   $('#console').append('<p class="text-danger">'+ a +'</p>')
-// };
+ var console = {};
+ console.log = function( a ){
+   $('#console').append('<p>'+ a +'</p>')
+ };
+ console.warn = function( a ){
+   $('#console').append('<p class="text-danger">'+ a +'</p>')
+ };
 
 
 function download(text, name, type){

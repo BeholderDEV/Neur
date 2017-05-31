@@ -21,8 +21,9 @@
         padding-bottom: 1.5rem;
       }
       #commands{
-        margin-top: 50px;
-      }
+        margin: 50px auto;
+        width:80% /* value of your choice which suits your alignment */
+    }
     </style>
     <div class="container">
       <nav class="header">
@@ -43,13 +44,27 @@
       </nav>
       <section>
         <div class="container">
-          <div class="col-12 text-center" id="commands">
-            <button id="train" class="btn btn-outline-primary">Train Network</button>
-            <button id="load" class="btn btn-outline-primary">Load Network</button>
-            <button id="save" class="btn btn-outline-primary">Save Network</button>
-            <button id="test" class="btn btn-outline-primary">Test Network</button>
-            <img id="actual" class="img-fluid" src="resources/img/f1/low/1.jpg">
-          </div>
+          <form class="form-inline text-center" id="commands">
+            <div class="form-group m-3">
+              <button id="train" class="btn btn-primary">Train Network</button>
+            </div>
+            <div class="form-group m-3">
+              <select class="form-control" id="exampleSelect1">
+                <option value="bulbasaur">Bulbasaur</option>
+                <option value="charmander">Charmander</option>
+                <option value="squirtle">Squirtle</option>
+              </select>
+            </div>
+            <div class="form-group m-3">
+              <button id="load" class="btn btn-primary">Load Network</button>
+            </div>
+            <div class="form-group m-3">
+              <button id="save" class="btn btn-primary">Save Network</button>
+            </div>
+            <div class="form-group m-3">
+              <button id="test" class="btn btn-primary">Test Network</button>
+            </div>
+          </form>
 
           <div class="col-md-12 m-3">
             <div class="card">

@@ -9,6 +9,7 @@ var numeroImagens = 151;
 var network;
 var imgQuality = 'testLow';
 var testSet = 'f1';
+var networkName = 'charmander';
 
 $( document ).ready(function() {
 
@@ -103,7 +104,8 @@ function prepareImageArray(i, numeroImageTest, set, trainingSet, canvas, context
 }
 
 $('#load').click(function(event){
-  $.getJSON("resources/trained_network/squirtleNeur.json", function(json) {
+  networkName = $('#exampleSelect1').val();
+  $.getJSON("resources/trained_network/"+networkName+"Neur.json", function(json) {
       network = Network.fromJSON(json);
       console.log("Loaded JSON");
   });
@@ -124,7 +126,7 @@ $('#test').click(function(event){
   }
   var canvas = document.createElement('canvas');
   var context = canvas.getContext('2d');
-  console.log("Reconhecendo Squirtle");
+  console.log("Reconhecendo "+networkName);
   validateTest(1, numeroImagens, testSet, canvas, context);
   if(testSet === 'f1'){
     testSet = 'f2';

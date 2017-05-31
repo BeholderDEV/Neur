@@ -104,6 +104,7 @@ function prepareImageArray(i, numeroImageTest, set, trainingSet, canvas, context
 }
 
 $('#load').click(function(event){
+  event.preventDefault();
   networkName = $('#exampleSelect1').val();
   $.getJSON("resources/trained_network/"+networkName+"Neur.json", function(json) {
       network = Network.fromJSON(json);
@@ -112,6 +113,7 @@ $('#load').click(function(event){
 });
 
 $('#save').click(function(event){
+  event.preventDefault();
   if(network === undefined){
     return;
   }

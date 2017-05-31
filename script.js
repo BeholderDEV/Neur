@@ -16,10 +16,10 @@ $( document ).ready(function() {
 
  var console = {};
  console.log = function( a ){
-   $('#console').append('<p>'+ a +'</p>')
+   $('#console').append('<p>'+ a +'</p>');
  };
  console.warn = function( a ){
-   $('#console').append('<p class="text-danger">'+ a +'</p>')
+   $('#console').append('<p class="text-danger">'+ a +'</p>');
  };
 
 
@@ -90,7 +90,7 @@ function prepareImageArray(i, numeroImageTest, set, trainingSet, canvas, context
     // }else if(i === 3){
     //   trainingSet[i - 1] = {input: newData, output: [0, 0 ,1]};
     // }
-    if(i === 4){
+    if(i === 7){
       trainingSet[i - 1] = {input: newData, output: [1]};
     }else{
       trainingSet[i - 1] = {input: newData, output: [0]};
@@ -143,8 +143,8 @@ $('#train').click(function(event) {
   prepareImageArray(1, numeroImagens, 'f1', trainingSet, canvas, context, function(trainSet){
     console.log("Iniciou");
     network.train(trainSet, {
-      log: 100,
-      iterations: 1000,
+      log: 5000,
+      iterations: 50000,
       error: 0.0000001,
       rate: 0.001
     });

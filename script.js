@@ -123,6 +123,7 @@ $('#save').click(function(event){
 });
 
 $('#test').click(function(event){
+  event.preventDefault();
   if(network === undefined){
     return;
   }
